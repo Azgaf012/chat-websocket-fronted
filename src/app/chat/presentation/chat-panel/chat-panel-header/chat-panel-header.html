@@ -1,0 +1,24 @@
+<header class="header">
+  <div class="title-group">
+    <span class="title">{{ title() }}</span>
+    <app-status-badge [status]="status()" />
+  </div>
+  <div class="actions">
+    <button
+      type="button"
+      class="icon-btn"
+      title="Nueva conversación"
+      (click)="newConversation.emit()"
+    >
+      ↻
+    </button>
+    <button
+      type="button"
+      class="icon-btn"
+      title="Cerrar"
+      (click)="close.emit()"
+    >
+      ×
+    </button>
+  </div>
+</header>

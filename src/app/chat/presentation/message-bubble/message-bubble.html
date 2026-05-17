@@ -1,0 +1,17 @@
+@let m = message();
+
+@if (m.author === "system") {
+  <div class="system">
+    <span class="text">{{ m.text }}</span>
+  </div>
+} @else {
+  <div class="row" [attr.data-author]="m.author">
+    <div class="bubble">
+      @if (m.authorName && m.author !== "me") {
+        <div class="name">{{ m.authorName }}</div>
+      }
+      <div class="text">{{ m.text }}</div>
+      <div class="time">{{ m.timestamp | date: "HH:mm" }}</div>
+    </div>
+  </div>
+}

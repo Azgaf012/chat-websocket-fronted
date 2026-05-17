@@ -1,0 +1,41 @@
+.bubble {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: #2563eb;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(37, 99, 235, 0.4);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  transition:
+    transform 160ms ease,
+    background 160ms ease;
+}
+
+.bubble:hover {
+  transform: scale(1.05);
+  background: #1d4ed8;
+}
+
+.bubble.is-open {
+  background: #1e293b;
+}
+
+.icon {
+  font-size: 22px;
+  line-height: 1;
+}
+
+@media (max-width: 480px) {
+  .bubble {
+    right: 16px;
+    bottom: 16px;
+  }
+}

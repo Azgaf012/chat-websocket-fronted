@@ -1,0 +1,13 @@
+@if (open()) {
+  <app-chat-panel
+    [status]="status()"
+    [messages]="messages()"
+    [typingName]="typingName()"
+    [canSend]="canSend()"
+    (send)="send($event)"
+    (newConversation)="newConversation()"
+    (close)="closePanel()"
+  />
+}
+
+<app-chat-bubble [open]="open()" (toggle)="toggle()" />

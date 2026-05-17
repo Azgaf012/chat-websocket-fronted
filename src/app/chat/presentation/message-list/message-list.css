@@ -1,0 +1,23 @@
+.scroller {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px 12px;
+  display: flex;
+  flex-direction: column;
+}
+
+.scroller::-webkit-scrollbar {
+  width: 6px;
+}
+.scroller::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 3px;
+}
+
+.empty {
+  margin: auto;
+  color: #9ca3af;
+  font-size: 13px;
+  text-align: center;
+  padding: 24px 16px;
+}

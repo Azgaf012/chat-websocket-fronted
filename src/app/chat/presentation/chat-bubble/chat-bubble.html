@@ -1,0 +1,13 @@
+<button
+  type="button"
+  class="bubble"
+  [class.is-open]="open()"
+  (click)="toggle.emit()"
+  [attr.aria-label]="open() ? 'Cerrar chat' : 'Abrir chat'"
+>
+  @if (open()) {
+    <span class="icon">×</span>
+  } @else {
+    <span class="icon">💬</span>
+  }
+</button>

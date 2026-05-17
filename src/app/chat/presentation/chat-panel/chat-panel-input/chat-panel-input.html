@@ -1,0 +1,20 @@
+<form class="form" (submit)="onSubmit($event)">
+  <textarea
+    class="textarea"
+    rows="1"
+    placeholder="Escribe un mensaje…"
+    [ngModel]="text()"
+    (ngModelChange)="text.set($event)"
+    name="message"
+    [disabled]="disabled()"
+    (keydown)="onKeydown($event)"
+  ></textarea>
+  <button
+    type="submit"
+    class="send-btn"
+    [disabled]="disabled() || !text().trim()"
+    title="Enviar"
+  >
+    ➤
+  </button>
+</form>

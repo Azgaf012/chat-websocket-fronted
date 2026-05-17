@@ -1,0 +1,17 @@
+<section class="panel" role="dialog" aria-label="Chat">
+  <app-chat-panel-header
+    [status]="status()"
+    (newConversation)="newConversation.emit()"
+    (close)="close.emit()"
+  />
+
+  <app-message-list [messages]="messages()" />
+
+  @if (typingName()) {
+    <div class="typing-row">
+      <app-typing-indicator [name]="typingName()" />
+    </div>
+  }
+
+  <app-chat-panel-input [disabled]="!canSend()" (send)="send.emit($event)" />
+</section>
