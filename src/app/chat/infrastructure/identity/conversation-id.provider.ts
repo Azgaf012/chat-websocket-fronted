@@ -1,7 +1,8 @@
 import { Injectable, signal } from '@angular/core';
+import { uuidv4 } from '../utils/uuid';
 
 function build(): string {
-  return `conv-${Date.now()}`;
+  return uuidv4();
 }
 
 /**
