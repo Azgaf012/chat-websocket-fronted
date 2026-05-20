@@ -1,23 +1,18 @@
 import { Injectable, signal } from '@angular/core';
-import { uuidv4 } from '../utils/uuid';
 
-function build(): string {
-  return uuidv4();
-}
+const MOCK_CONVERSATION_ID = 'mock-conversation-00000001';
 
 /**
- * Manages the active `conversationId`. Regenerated when the user starts
- * a new conversation.
+ * Manages the active `conversationId`.
+ * Mocked with a fixed value for development/testing.
  */
 @Injectable({ providedIn: 'root' })
 export class ConversationIdProvider {
-  private readonly _current = signal<string>(build());
+  private readonly _current = signal<string>(MOCK_CONVERSATION_ID);
 
   readonly current = this._current.asReadonly();
 
   regenerate(): string {
-    const next = build();
-    this._current.set(next);
-    return next;
+    return MOCK_CONVERSATION_ID;
   }
 }

@@ -1,19 +1,18 @@
 import { Injectable, signal } from '@angular/core';
-import { uuidv4 } from '../utils/uuid';
+
+const MOCK_SESSION_ID = 'mock-session-00000001';
 
 /**
- * Manages the STOMP `sessionId` header. Generated as UUID v4 per connection
- * and regenerated when the user explicitly starts a new conversation.
+ * Manages the STOMP `sessionId` header.
+ * Mocked with a fixed value for development/testing.
  */
 @Injectable({ providedIn: 'root' })
 export class SessionIdProvider {
-  private readonly _current = signal<string>(uuidv4());
+  private readonly _current = signal<string>(MOCK_SESSION_ID);
 
   readonly current = this._current.asReadonly();
 
   regenerate(): string {
-    const next = uuidv4();
-    this._current.set(next);
-    return next;
+    return MOCK_SESSION_ID;
   }
 }
