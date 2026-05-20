@@ -30,6 +30,10 @@ export class ChatMessagingService {
       text: trimmed,
     };
 
+    console.log('[chat] sending message', {
+      destination: DEST_SEND,
+      payload: dto,
+    });
     this.transport.publish(DEST_SEND, dto);
     applyOutgoing(this.store, trimmed);
   }
