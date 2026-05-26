@@ -1,7 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 
 import { ConversationIdProvider } from '../infrastructure/identity/conversation-id.provider';
-import { SessionIdProvider } from '../infrastructure/identity/session-id.provider';
 import { StompTransport } from '../infrastructure/transport/stomp-transport';
 import { Subscription } from '../infrastructure/transport/transport.tokens';
 
@@ -23,7 +22,6 @@ const DEST_CONVERSATION_TOPIC = (convId: string) =>
 @Injectable({ providedIn: 'root' })
 export class ChatConnectionService {
   private readonly transport = inject(StompTransport);
-  private readonly sessionId = inject(SessionIdProvider);
   private readonly conversationId = inject(ConversationIdProvider);
   private readonly handler = inject(IncomingEventHandler);
   private readonly store = inject(ChatStore);
@@ -34,7 +32,7 @@ export class ChatConnectionService {
     this.store.setStatus('connecting');
     try {
       await this.transport.connect({
-        headers: { sessionId: this.sessionId.current() },
+        headers: { sessionId: this.conversationId.current() },
       });
       this.subscribeAll();
       this.store.setStatus('connected');
@@ -54,7 +52,6 @@ export class ChatConnectionService {
   /** Disconnects, regenerates `sessionId` + `conversationId`, reconnects. */
   async reconnectWithNewSession(): Promise<void> {
     await this.disconnect();
-    this.sessionId.regenerate();
     this.conversationId.regenerate();
     this.store.reset();
     await this.connect();
