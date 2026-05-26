@@ -31,8 +31,13 @@ export class ChatConnectionService {
   async connect(): Promise<void> {
     this.store.setStatus('connecting');
     try {
+      const sessionId = this.conversationId.current();
+      console.log(
+        '[chat] connecting with sessionId (conversationId):',
+        sessionId,
+      );
       await this.transport.connect({
-        headers: { sessionId: this.conversationId.current() },
+        headers: { sessionId },
       });
       this.subscribeAll();
       this.store.setStatus('connected');

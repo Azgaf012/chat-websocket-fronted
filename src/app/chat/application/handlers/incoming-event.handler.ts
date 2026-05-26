@@ -25,7 +25,7 @@ export class IncomingEventHandler {
   private readonly store = inject(ChatStore);
 
   handle(evt: IncomingEvent): void {
-    console.log('[chat] incoming event', evt);
+    console.log('[chat] outbound message (backend → frontend)', evt);
     switch (evt.kind) {
       case 'AGENT_MESSAGE':
         applyAgentMessage(this.store, evt);

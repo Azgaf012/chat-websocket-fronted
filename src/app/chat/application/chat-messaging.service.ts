@@ -30,10 +30,14 @@ export class ChatMessagingService {
       text: trimmed,
     };
 
-    console.log('[chat] sending message', {
-      destination: DEST_SEND,
-      payload: dto,
-    });
+    console.group('[chat] inbound message (frontend → backend)');
+    console.log('destination  :', DEST_SEND);
+    console.log('stomp headers:', { 'content-type': 'application/json' });
+    console.log('conversationId:', dto.conversationId);
+    console.log('userId        :', dto.userId);
+    console.log('text          :', dto.text);
+    console.log('full payload  :', dto);
+    console.groupEnd();
     this.transport.publish(DEST_SEND, dto);
     applyOutgoing(this.store, trimmed);
   }
