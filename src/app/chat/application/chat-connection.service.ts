@@ -1,5 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 
+import { environment } from '../../../environments/environment';
+import { uuidv4 } from '../infrastructure/utils/uuid';
 import { ConversationIdProvider } from '../infrastructure/identity/conversation-id.provider';
 import { StompTransport } from '../infrastructure/transport/stomp-transport';
 import { Subscription } from '../infrastructure/transport/transport.tokens';
@@ -9,6 +11,9 @@ import { toIncomingEvent } from '../domain/mappers/advisor-to-incoming.mapper';
 
 import { IncomingEventHandler } from './handlers/incoming-event.handler';
 import { ChatStore } from './state/chat.store';
+
+/** Stable UUID for the duration of the browser page session. */
+const CLIENT_SESSION_ID = uuidv4();
 
 const DEST_USER_QUEUE = '/user/queue/chat-response';
 const DEST_CONVERSATION_TOPIC = (convId: string) =>
@@ -31,14 +36,16 @@ export class ChatConnectionService {
   async connect(): Promise<void> {
     this.store.setStatus('connecting');
     try {
-      const sessionId = this.conversationId.current();
-      console.log(
-        '[chat] connecting with sessionId (conversationId):',
-        sessionId,
-      );
-      await this.transport.connect({
-        headers: { sessionId },
-      });
+      const headers: Record<string, string> = {
+        sessionId: this.conversationId.current(),
+        'x-app': environment.wsHeaders.xApp,
+        'x-guid': uuidv4(),
+        'x-channel': environment.wsHeaders.xChannel,
+        'x-medium': environment.wsHeaders.xMedium,
+        'x-session': CLIENT_SESSION_ID,
+      };
+      console.log('[chat] connecting with headers:', headers);
+      await this.transport.connect({ headers });
       this.subscribeAll();
       this.store.setStatus('connected');
     } catch (err) {

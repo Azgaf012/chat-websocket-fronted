@@ -28,7 +28,7 @@ export class StompTransport implements ChatTransport {
       this.disposeClient();
 
       const client = new Client({
-        webSocketFactory: createSockJsFactory(environment.wsUrl),
+        webSocketFactory: createSockJsFactory(environment.wsUrl, opts.headers),
         connectHeaders: opts.headers,
         heartbeatIncoming: 10000,
         heartbeatOutgoing: 10000,
