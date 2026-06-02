@@ -6,4 +6,12 @@ export interface WsChatMessageDto {
   conversationId: string;
   userId: string;
   text: string;
+  device: string;
+  deviceIp: string;
+  session: string;
+  channelSession: string;
+  medium: string;
+  app: string;
+  geolocation: string;
+  agency: string;
 }
