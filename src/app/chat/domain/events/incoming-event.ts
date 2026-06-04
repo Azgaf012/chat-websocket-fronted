@@ -12,26 +12,24 @@ export interface BaseEvent {
 }
 
 export interface AgentMessageEvent extends BaseEvent {
-  kind: 'AGENT_MESSAGE';
+  kind: 'AGENT';
   id: string;
   senderName: string;
   text: string;
 }
 
 export interface BotMessageEvent extends BaseEvent {
-  kind: 'BOT_MESSAGE';
+  kind: 'BOT';
   id: string;
   senderName: string;
   text: string;
 }
 
-export interface TypingOnEvent extends BaseEvent {
-  kind: 'TYPING_ON';
-  senderName: string;
-}
-
-export interface TypingOffEvent extends BaseEvent {
-  kind: 'TYPING_OFF';
+export interface TypingEvent extends BaseEvent {
+  kind: 'TYPING';
+  /** `true` when the agent started typing, `false` when they stopped. */
+  active: boolean;
+  senderName?: string;
 }
 
 export interface OpenEvent extends BaseEvent {
@@ -66,8 +64,7 @@ export interface UnknownEvent extends BaseEvent {
 export type IncomingEvent =
   | AgentMessageEvent
   | BotMessageEvent
-  | TypingOnEvent
-  | TypingOffEvent
+  | TypingEvent
   | OpenEvent
   | CloseEvent
   | LeaveEvent

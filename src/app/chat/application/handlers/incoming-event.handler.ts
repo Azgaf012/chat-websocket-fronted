@@ -9,8 +9,7 @@ import {
   applyCustomerEnd,
   applyLeave,
   applyOpen,
-  applyTypingOff,
-  applyTypingOn,
+  applyTyping,
 } from '../state/chat-state.actions';
 import { ChatStore } from '../state/chat.store';
 
@@ -25,19 +24,15 @@ export class IncomingEventHandler {
   private readonly store = inject(ChatStore);
 
   handle(evt: IncomingEvent): void {
-    console.log('[chat] outbound message (backend → frontend)', evt);
     switch (evt.kind) {
-      case 'AGENT_MESSAGE':
+      case 'AGENT':
         applyAgentMessage(this.store, evt);
         return;
-      case 'BOT_MESSAGE':
+      case 'BOT':
         applyBotMessage(this.store, evt);
         return;
-      case 'TYPING_ON':
-        applyTypingOn(this.store, evt);
-        return;
-      case 'TYPING_OFF':
-        applyTypingOff(this.store, evt);
+      case 'TYPING':
+        applyTyping(this.store, evt);
         return;
       case 'OPEN':
         applyOpen(this.store, evt);

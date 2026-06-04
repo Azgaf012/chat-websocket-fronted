@@ -1,6 +1,8 @@
 export const environment = {
   production: false,
   wsUrl: 'http://localhost:8080/ws',
+  /** Auto-hide the typing indicator this many ms after a TYPING event. */
+  typingTimeoutMs: 5000,
   wsHeaders: {
     xApp: 'omn-chat-frontend',
     xChannel: 'web',

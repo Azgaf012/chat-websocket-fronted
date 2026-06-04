@@ -1,5 +1,6 @@
 export type MessageType =
   | 'AGENT'
+  | 'TEXT'
   | 'BOT'
   | 'TYPING'
   | 'OPEN'

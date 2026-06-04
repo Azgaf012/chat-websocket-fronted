@@ -21,9 +21,11 @@ export function toIncomingEvent(dto: AdvisorMessageEventDto): IncomingEvent {
   };
 
   switch (dto.type) {
+    // `TEXT` is an agent text message — treat it the same as `AGENT`.
     case 'AGENT':
+    case 'TEXT':
       return {
-        kind: 'AGENT_MESSAGE',
+        kind: 'AGENT',
         ...base,
         id: dto.id ?? `${dto.timestamp}-${Math.random()}`,
         senderName: dto.senderName,
@@ -32,7 +34,7 @@ export function toIncomingEvent(dto: AdvisorMessageEventDto): IncomingEvent {
 
     case 'BOT':
       return {
-        kind: 'BOT_MESSAGE',
+        kind: 'BOT',
         ...base,
         id: dto.id ?? `${dto.timestamp}-${Math.random()}`,
         senderName: dto.senderName,
@@ -42,8 +44,8 @@ export function toIncomingEvent(dto: AdvisorMessageEventDto): IncomingEvent {
     case 'TYPING':
       // TYPING ON vs OFF is encoded in `content`: non-empty → on, empty → off.
       return dto.content && dto.content.length > 0
-        ? { kind: 'TYPING_ON', ...base, senderName: dto.senderName }
-        : { kind: 'TYPING_OFF', ...base };
+        ? { kind: 'TYPING', ...base, active: true, senderName: dto.senderName }
+        : { kind: 'TYPING', ...base, active: false };
 
     case 'OPEN':
       return { kind: 'OPEN', ...base };

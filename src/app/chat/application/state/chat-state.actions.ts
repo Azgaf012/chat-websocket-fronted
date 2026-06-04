@@ -7,8 +7,7 @@ import {
   CustomerEndEvent,
   LeaveEvent,
   OpenEvent,
-  TypingOffEvent,
-  TypingOnEvent,
+  TypingEvent,
 } from '../../domain/events/incoming-event';
 import {
   agentEventToUiMessage,
@@ -17,6 +16,7 @@ import {
   systemUiMessage,
 } from '../../domain/mappers/incoming-to-ui.mapper';
 import { uuidv4 } from '../../infrastructure/utils/uuid';
+import { environment } from '../../../../environments/environment';
 import { ChatStore } from './chat.store';
 
 /**
@@ -36,12 +36,12 @@ export function applyBotMessage(store: ChatStore, evt: BotMessageEvent): void {
   store.appendMessage(botEventToUiMessage(evt));
 }
 
-export function applyTypingOn(store: ChatStore, evt: TypingOnEvent): void {
-  store.setTypingName(evt.senderName || 'Agent');
-}
-
-export function applyTypingOff(store: ChatStore, _evt: TypingOffEvent): void {
-  store.setTypingName(null);
+export function applyTyping(store: ChatStore, evt: TypingEvent): void {
+  if (evt.active) {
+    store.setTypingName(evt.senderName || 'Agent', environment.typingTimeoutMs);
+  } else {
+    store.setTypingName(null);
+  }
 }
 
 export function applyOpen(store: ChatStore, _evt: OpenEvent): void {

@@ -13,6 +13,9 @@ export class ChatStore {
   private readonly _typingName = signal<string | null>(null);
   private readonly _acdActive = signal<boolean>(false);
 
+  /** Pending auto-clear timer for the typing indicator, if any. */
+  private typingTimer: ReturnType<typeof setTimeout> | null = null;
+
   readonly status = this._status.asReadonly();
   readonly messages = this._messages.asReadonly();
   readonly typingName = this._typingName.asReadonly();
@@ -28,8 +31,27 @@ export class ChatStore {
     this._messages.update((list) => [...list, msg]);
   }
 
-  setTypingName(name: string | null): void {
+  /**
+   * Sets the typing indicator name. When `autoClearMs` is provided and a
+   * name is set, the indicator is automatically cleared after that delay.
+   * Any previously scheduled auto-clear is cancelled first.
+   */
+  setTypingName(name: string | null, autoClearMs?: number): void {
+    this.clearTypingTimer();
     this._typingName.set(name);
+    if (name !== null && autoClearMs && autoClearMs > 0) {
+      this.typingTimer = setTimeout(() => {
+        this._typingName.set(null);
+        this.typingTimer = null;
+      }, autoClearMs);
+    }
+  }
+
+  private clearTypingTimer(): void {
+    if (this.typingTimer !== null) {
+      clearTimeout(this.typingTimer);
+      this.typingTimer = null;
+    }
   }
 
   setAcdActive(active: boolean): void {
@@ -37,6 +59,7 @@ export class ChatStore {
   }
 
   reset(): void {
+    this.clearTypingTimer();
     this._messages.set([]);
     this._typingName.set(null);
     this._acdActive.set(false);
