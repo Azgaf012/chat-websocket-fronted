@@ -76,7 +76,11 @@ export class ChatConnectionService {
       this.transport.subscribe<AdvisorMessageEventDto>(
         DEST_USER_QUEUE,
         (dto) => {
-          console.log('[chat] inbound message (backend → frontend)', dto.type, dto);
+          console.log(
+            '[chat] inbound message (backend → frontend)',
+            dto.type,
+            dto,
+          );
           this.handler.handle(toIncomingEvent(dto));
         },
       ),
@@ -86,7 +90,11 @@ export class ChatConnectionService {
       this.transport.subscribe<AdvisorMessageEventDto>(
         DEST_CONVERSATION_TOPIC(this.conversationId.current()),
         (dto) => {
-          console.log('[chat] inbound message (backend → frontend)', dto.type, dto);
+          console.log(
+            '[chat] inbound message (backend → frontend)',
+            dto.type,
+            dto,
+          );
           this.handler.handle(toIncomingEvent(dto));
         },
       ),
