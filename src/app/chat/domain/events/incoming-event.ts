@@ -6,6 +6,8 @@
  *   3. Handle it in `incoming-event.handler.ts`.
  */
 
+import { QuickReply } from '../ui-message.model';
+
 export interface BaseEvent {
   conversationId: string;
   timestamp: Date;
@@ -16,6 +18,7 @@ export interface AgentMessageEvent extends BaseEvent {
   id: string;
   senderName: string;
   text: string;
+  quickReplies?: QuickReply[];
 }
 
 export interface BotMessageEvent extends BaseEvent {
@@ -23,6 +26,7 @@ export interface BotMessageEvent extends BaseEvent {
   id: string;
   senderName: string;
   text: string;
+  quickReplies?: QuickReply[];
 }
 
 export interface TypingEvent extends BaseEvent {

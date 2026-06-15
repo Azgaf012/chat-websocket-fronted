@@ -47,6 +47,10 @@ export class ChatWidget {
     this.facade.send(text);
   }
 
+  sendChip(payload: string): void {
+    this.facade.send(payload);
+  }
+
   newConversation(): void {
     void this.facade.startNewConversation();
   }

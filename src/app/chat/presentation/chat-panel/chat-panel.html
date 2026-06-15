@@ -5,7 +5,7 @@
     (close)="close.emit()"
   />
 
-  <app-message-list [messages]="messages()" />
+  <app-message-list [messages]="messages()" (chipSelected)="chipSelected.emit($event)" />
 
   @if (typingName()) {
     <div class="typing-row">

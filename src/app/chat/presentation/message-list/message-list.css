@@ -1,5 +1,14 @@
+:host {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
 .scroller {
   flex: 1;
+  min-height: 0;
   overflow-y: auto;
   padding: 8px 12px;
   display: flex;

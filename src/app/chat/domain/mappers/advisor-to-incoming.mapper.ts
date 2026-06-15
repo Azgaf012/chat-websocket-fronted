@@ -1,5 +1,14 @@
 import { AdvisorMessageEventDto } from '../advisor-message.dto';
 import { IncomingEvent } from '../events/incoming-event';
+import { QuickReply } from '../ui-message.model';
+
+function extractQuickReplies(dto: AdvisorMessageEventDto): QuickReply[] {
+  return (
+    dto.structuredContent
+      ?.filter((item) => item.contentType === 'QuickReply')
+      .map((item) => ({ text: item.quickReply.text, payload: item.quickReply.payload })) ?? []
+  );
+}
 
 /**
  * Parse a backend timestamp like `2026-05-17T10:30:00` into a Date.
@@ -23,23 +32,29 @@ export function toIncomingEvent(dto: AdvisorMessageEventDto): IncomingEvent {
   switch (dto.type) {
     // `TEXT` is an agent text message — treat it the same as `AGENT`.
     case 'AGENT':
-    case 'TEXT':
+    case 'TEXT': {
+      const agentReplies = extractQuickReplies(dto);
       return {
         kind: 'AGENT',
         ...base,
         id: dto.id ?? `${dto.timestamp}-${Math.random()}`,
         senderName: dto.senderName,
         text: dto.content,
+        ...(agentReplies.length > 0 && { quickReplies: agentReplies }),
       };
+    }
 
-    case 'BOT':
+    case 'BOT': {
+      const botReplies = extractQuickReplies(dto);
       return {
         kind: 'BOT',
         ...base,
         id: dto.id ?? `${dto.timestamp}-${Math.random()}`,
         senderName: dto.senderName,
         text: dto.content,
+        ...(botReplies.length > 0 && { quickReplies: botReplies }),
       };
+    }
 
     case 'TYPING':
       // TYPING ON vs OFF is encoded in `content`: non-empty → on, empty → off.

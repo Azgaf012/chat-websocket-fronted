@@ -4,8 +4,8 @@ import {
   Component,
   ElementRef,
   effect,
-  inject,
   input,
+  output,
   viewChild,
 } from '@angular/core';
 import { UiMessage } from '../../domain/ui-message.model';
@@ -20,6 +20,7 @@ import { MessageBubble } from '../message-bubble/message-bubble';
 })
 export class MessageList implements AfterViewInit {
   readonly messages = input.required<readonly UiMessage[]>();
+  readonly chipSelected = output<string>();
 
   private readonly scroller =
     viewChild.required<ElementRef<HTMLDivElement>>('scroller');

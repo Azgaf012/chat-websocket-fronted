@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { UiMessage } from '../../domain/ui-message.model';
 
@@ -11,4 +11,5 @@ import { UiMessage } from '../../domain/ui-message.model';
 })
 export class MessageBubble {
   readonly message = input.required<UiMessage>();
+  readonly chipSelected = output<string>();
 }

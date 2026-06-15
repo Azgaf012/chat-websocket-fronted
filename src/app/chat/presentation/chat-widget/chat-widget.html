@@ -5,6 +5,7 @@
     [typingName]="typingName()"
     [canSend]="canSend()"
     (send)="send($event)"
+    (chipSelected)="sendChip($event)"
     (newConversation)="newConversation()"
     (close)="closePanel()"
   />

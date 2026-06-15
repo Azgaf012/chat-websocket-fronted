@@ -25,6 +25,7 @@ export class ChatPanel {
   readonly canSend = input<boolean>(false);
 
   readonly send = output<string>();
+  readonly chipSelected = output<string>();
   readonly newConversation = output<void>();
   readonly close = output<void>();
 }

@@ -14,4 +14,11 @@
       <div class="time">{{ m.timestamp | date: "HH:mm" }}</div>
     </div>
   </div>
+  @if (m.quickReplies && m.quickReplies.length > 0) {
+    <div class="chips-row" [attr.data-author]="m.author">
+      @for (qr of m.quickReplies; track qr.payload) {
+        <button class="chip" type="button" (click)="chipSelected.emit(qr.payload)">{{ qr.text }}</button>
+      }
+    </div>
+  }
 }

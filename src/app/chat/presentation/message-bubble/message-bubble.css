@@ -70,3 +70,32 @@
   border-radius: 999px;
   border: 1px solid #e5e7eb;
 }
+
+.chips-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 4px 0 6px 0;
+  padding: 0 4px;
+}
+
+.chips-row[data-author="me"] {
+  justify-content: flex-end;
+}
+
+.chip {
+  cursor: pointer;
+  font-size: 13px;
+  padding: 5px 12px;
+  border-radius: 999px;
+  border: 1.5px solid #7c3aed;
+  background: #fff;
+  color: #7c3aed;
+  line-height: 1.3;
+  transition: background 150ms, color 150ms;
+}
+
+.chip:hover {
+  background: #7c3aed;
+  color: #fff;
+}
