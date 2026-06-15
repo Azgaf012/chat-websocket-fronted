@@ -8,7 +8,8 @@ export function agentEventToUiMessage(evt: AgentMessageEvent): UiMessage {
     authorName: evt.senderName,
     text: evt.text,
     timestamp: evt.timestamp,
-    ...(evt.quickReplies && evt.quickReplies.length > 0 && { quickReplies: evt.quickReplies }),
+    ...(evt.quickReplies &&
+      evt.quickReplies.length > 0 && { quickReplies: evt.quickReplies }),
   };
 }
 
@@ -19,7 +20,8 @@ export function botEventToUiMessage(evt: BotMessageEvent): UiMessage {
     authorName: evt.senderName,
     text: evt.text,
     timestamp: evt.timestamp,
-    ...(evt.quickReplies && evt.quickReplies.length > 0 && { quickReplies: evt.quickReplies }),
+    ...(evt.quickReplies &&
+      evt.quickReplies.length > 0 && { quickReplies: evt.quickReplies }),
   };
 }
 

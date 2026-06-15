@@ -92,7 +92,9 @@
   background: #fff;
   color: #7c3aed;
   line-height: 1.3;
-  transition: background 150ms, color 150ms;
+  transition:
+    background 150ms,
+    color 150ms;
 }
 
 .chip:hover {

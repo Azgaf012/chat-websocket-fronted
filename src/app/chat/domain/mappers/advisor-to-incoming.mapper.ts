@@ -6,7 +6,10 @@ function extractQuickReplies(dto: AdvisorMessageEventDto): QuickReply[] {
   return (
     dto.structuredContent
       ?.filter((item) => item.contentType === 'QuickReply')
-      .map((item) => ({ text: item.quickReply.text, payload: item.quickReply.payload })) ?? []
+      .map((item) => ({
+        text: item.quickReply.text,
+        payload: item.quickReply.payload,
+      })) ?? []
   );
 }
 
