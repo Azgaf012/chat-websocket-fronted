@@ -103,7 +103,16 @@ export class StompTransport implements ChatTransport {
     this.client.publish({
       destination,
       body: typeof body === 'string' ? body : JSON.stringify(body),
-      headers: { 'content-type': 'application/json' },
+      headers: {
+        'content-type': 'application/json',
+        // TODO: replace with real values before going to production
+        'x-guid': 'test-guid-12345',
+        'x-session': 'test-session-abc',
+        'x-channel': 'WEB',
+        'x-device-ip': '127.0.0.1',
+        'x-device': 'DESKTOP',
+        'Authorization': 'Bearer test-bearer-token',
+      },
     });
   }
 
