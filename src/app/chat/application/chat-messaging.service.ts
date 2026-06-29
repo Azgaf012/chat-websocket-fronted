@@ -29,15 +29,21 @@ export class ChatMessagingService {
     const dto: WsChatMessageDto = {
       conversationId: this.conversationId.current(),
       userId: this.userId.current(),
+      // TODO: replace with real values before going to production
+      clientIdType: 'NIF',
+      clientCif: 'test-cif-00000',
       text: trimmed,
       ...this.metadata.current(),
     };
 
-    console.group('[chat] inbound message (frontend → backend)');
-    console.log('destination  :', DEST_SEND);
-    console.log('stomp headers:', { 'content-type': 'application/json' });
+    console.group('[chat] outbound message (frontend → backend)');
+    console.log('destination   :', DEST_SEND);
+    console.log('stomp headers :', { 'content-type': 'application/json' });
+    console.log('--- body ---');
     console.log('conversationId:', dto.conversationId);
     console.log('userId        :', dto.userId);
+    console.log('clientIdType  :', dto.clientIdType);
+    console.log('clientCif     :', dto.clientCif);
     console.log('text          :', dto.text);
     console.log('device        :', dto.device);
     console.log('deviceIp      :', dto.deviceIp);
@@ -47,7 +53,7 @@ export class ChatMessagingService {
     console.log('app           :', dto.app);
     console.log('geolocation   :', dto.geolocation);
     console.log('agency        :', dto.agency);
-    console.log('full payload  :', dto);
+    console.log('full body JSON:', JSON.stringify(dto, null, 2));
     console.groupEnd();
     this.transport.publish(DEST_SEND, dto);
     applyOutgoing(this.store, trimmed);

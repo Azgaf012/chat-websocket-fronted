@@ -5,6 +5,8 @@
 export interface WsChatMessageDto {
   conversationId: string;
   userId: string;
+  clientIdType: string;
+  clientCif: string;
   text: string;
   device: string;
   deviceIp: string;
