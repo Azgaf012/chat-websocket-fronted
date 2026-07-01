@@ -1,6 +1,7 @@
 /**
- * Outbound DTO sent to `/app/chat.send`.
- * `sessionId` is intentionally omitted — backend infers it from the STOMP session.
+ * Outbound DTO sent as the **body** of the `/app/chat.send` STOMP frame.
+ * Context metadata (device, session, channel, etc.) travels as STOMP message
+ * headers — see `ChatMessagingService.buildMessageHeaders()`.
  */
 export interface WsChatMessageDto {
   conversationId: string;
@@ -8,12 +9,4 @@ export interface WsChatMessageDto {
   clientIdType: string;
   clientCif: string;
   text: string;
-  device: string;
-  deviceIp: string;
-  session: string;
-  channelSession: string;
-  medium: string;
-  app: string;
-  geolocation: string;
-  agency: string;
 }

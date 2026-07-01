@@ -90,13 +90,25 @@ export class StompTransport implements ChatTransport {
     const sub: StompSubscription = this.client.subscribe(
       destination,
       (msg: IMessage) => {
-        handler(this.parseBody<T>(msg));
+        const payload = this.parseBody<T>(msg);
+        console.group('[chat] inbound frame (backend → frontend)');
+        console.log('destination :', destination);
+        console.log('--- stomp headers ---');
+        console.log(msg.headers);
+        console.log('--- body ---');
+        console.log(payload);
+        console.groupEnd();
+        handler(payload);
       },
     );
     return { unsubscribe: () => sub.unsubscribe() };
   }
 
-  publish(destination: string, body: unknown): void {
+  publish(
+    destination: string,
+    body: unknown,
+    headers: Record<string, string> = {},
+  ): void {
     if (!this.client || !this.client.connected) {
       throw new Error('Transport not connected — cannot publish.');
     }
@@ -107,11 +119,8 @@ export class StompTransport implements ChatTransport {
         'content-type': 'application/json',
         // TODO: replace with real values before going to production
         'x-guid': 'test-guid-12345',
-        'x-session': 'test-session-abc',
-        'x-channel': 'WEB',
-        'x-device-ip': '127.0.0.1',
-        'x-device': 'DESKTOP',
-        'Authorization': 'Bearer test-bearer-token',
+        Authorization: 'Bearer test-bearer-token',
+        ...headers,
       },
     });
   }

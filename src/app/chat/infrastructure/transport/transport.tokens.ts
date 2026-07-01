@@ -33,7 +33,8 @@ export interface ChatTransport {
     handler: (payload: T) => void,
   ): Subscription;
 
-  publish(destination: string, body: unknown): void;
+  /** Optional `headers` are merged into the STOMP MESSAGE frame headers. */
+  publish(destination: string, body: unknown, headers?: Record<string, string>): void;
 }
 
 export const CHAT_TRANSPORT = new InjectionToken<ChatTransport>(
