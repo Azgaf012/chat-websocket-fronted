@@ -3,19 +3,25 @@ import { Injectable, inject } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { uuidv4 } from '../infrastructure/utils/uuid';
 import { ConversationIdProvider } from '../infrastructure/identity/conversation-id.provider';
-import { StompTransport } from '../infrastructure/transport/stomp-transport';
-import { Subscription } from '../infrastructure/transport/transport.tokens';
+import { UserIdProvider } from '../infrastructure/identity/user-id.provider';
+import {
+  CHAT_TRANSPORT,
+  ChatTransport,
+  Subscription,
+} from '../infrastructure/transport/transport.tokens';
 
 import { AdvisorMessageEventDto } from '../domain/advisor-message.dto';
 import { toIncomingEvent } from '../domain/mappers/advisor-to-incoming.mapper';
 
 import { IncomingEventHandler } from './handlers/incoming-event.handler';
+import { MessageAcknowledgementService } from './message-acknowledgement.service';
 import { ChatStore } from './state/chat.store';
 
 /** Stable UUID for the duration of the browser page session. */
 const CLIENT_SESSION_ID = uuidv4();
 
 const DEST_USER_QUEUE = '/user/queue/chat-response';
+const DEST_ACK_QUEUE = '/user/queue/chat-ack';
 const DEST_CONVERSATION_TOPIC = (convId: string) =>
   `/topic/conversation/${convId}`;
 
@@ -26,9 +32,11 @@ const DEST_CONVERSATION_TOPIC = (convId: string) =>
  */
 @Injectable({ providedIn: 'root' })
 export class ChatConnectionService {
-  private readonly transport = inject(StompTransport);
+  private readonly transport: ChatTransport = inject(CHAT_TRANSPORT);
   private readonly conversationId = inject(ConversationIdProvider);
+  private readonly userId = inject(UserIdProvider);
   private readonly handler = inject(IncomingEventHandler);
+  private readonly acknowledgements = inject(MessageAcknowledgementService);
   private readonly store = inject(ChatStore);
 
   private subs: Subscription[] = [];
@@ -38,6 +46,7 @@ export class ChatConnectionService {
     try {
       const headers: Record<string, string> = {
         sessionId: this.conversationId.current(),
+        userId: this.userId.current(),
         'x-app': environment.wsHeaders.xApp,
         'x-guid': uuidv4(),
         'x-channel': environment.wsHeaders.xChannel,
@@ -81,9 +90,15 @@ export class ChatConnectionService {
             dto.type,
             dto,
           );
-          this.handler.handle(toIncomingEvent(dto));
+          this.handleUserQueueMessage(dto);
         },
       ),
+    );
+
+    this.subs.push(
+      this.transport.subscribe<unknown>(DEST_ACK_QUEUE, (confirmation) => {
+        this.acknowledgements.confirm(confirmation);
+      }),
     );
 
     this.subs.push(
@@ -99,6 +114,17 @@ export class ChatConnectionService {
         },
       ),
     );
+  }
+
+  private handleUserQueueMessage(dto: AdvisorMessageEventDto): void {
+    const processMessage = () => this.handler.handle(toIncomingEvent(dto));
+
+    if (dto.type === 'AGENT' || dto.type === 'BOT') {
+      this.acknowledgements.process(dto, processMessage);
+      return;
+    }
+
+    processMessage();
   }
 
   private unsubscribeAll(): void {

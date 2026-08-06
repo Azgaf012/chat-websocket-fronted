@@ -18,6 +18,7 @@ export interface StructuredContentItem {
  */
 export interface AdvisorMessageEventDto {
   id: string | null;
+  userId: string | null;
   conversationId: string;
   senderId: string;
   senderName: string;

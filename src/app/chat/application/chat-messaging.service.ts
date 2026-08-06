@@ -4,7 +4,10 @@ import { WsChatMessageDto } from '../domain/chat-message.dto';
 import { ChatMetadataProvider } from '../infrastructure/identity/chat-metadata.provider';
 import { ConversationIdProvider } from '../infrastructure/identity/conversation-id.provider';
 import { UserIdProvider } from '../infrastructure/identity/user-id.provider';
-import { StompTransport } from '../infrastructure/transport/stomp-transport';
+import {
+  CHAT_TRANSPORT,
+  ChatTransport,
+} from '../infrastructure/transport/transport.tokens';
 import { applyOutgoing } from './state/chat-state.actions';
 import { ChatStore } from './state/chat.store';
 
@@ -16,7 +19,7 @@ const DEST_SEND = '/app/chat.send';
  */
 @Injectable({ providedIn: 'root' })
 export class ChatMessagingService {
-  private readonly transport = inject(StompTransport);
+  private readonly transport: ChatTransport = inject(CHAT_TRANSPORT);
   private readonly conversationId = inject(ConversationIdProvider);
   private readonly userId = inject(UserIdProvider);
   private readonly metadata = inject(ChatMetadataProvider);
